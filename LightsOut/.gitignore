@@ -1,0 +1,23 @@
+# Ignore Python cache and virtual envs
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore Node.js
+node_modules/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignore JSON, log, and temp files if needed
+*.log
+*.tmp
+*.json

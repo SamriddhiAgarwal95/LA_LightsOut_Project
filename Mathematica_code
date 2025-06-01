@@ -1,0 +1,35 @@
+(*Function to generate the Lights Out matrix over GF(2) for an n x n \
+grid*)lightsOutMatrix[n_] := 
+  Module[{size = n^2, mat, neighbors, index}, 
+   mat = ConstantArray[0, {size, size}];
+   Do[index = (i - 1)*n + j;
+    neighbors = 
+     Select[{{i, j}, {i - 1, j}, {i + 1, j}, {i, j - 1}, {i, j + 1}}, 
+      1 <= #[[1]] <= n && 1 <= #[[2]] <= n &];
+    Do[mat[[index, (r[[1]] - 1)*n + r[[2]]]] = 1, {r, neighbors}], {i,
+      n}, {j, n}];
+   mat];
+
+(*Create the table for sizes 1 to 10*)
+tableData = 
+  Table[Module[{A, rank, nullity, totalVars, totalConfigs, 
+     solvableConfigs, solutionsPerConfig}, A = lightsOutMatrix[n];
+    totalVars = n^2;
+    rank = MatrixRank[A, Modulus -> 2];
+    nullity = totalVars - rank;
+    totalConfigs = 2^totalVars;
+    solvableConfigs = 2^rank;
+    solutionsPerConfig = 2^nullity;
+    {ToString[n] <> "\[Times]" <> ToString[n], totalVars, rank, 
+     nullity, If[rank < 50, solvableConfigs, "2^" <> ToString[rank]], 
+     solutionsPerConfig}], {n, 1, 10}];
+
+(*Headers*)
+headers = {"Grid Size (n\[Times]n)", "Total Variables (n²)", 
+   "Rank of A", "Nullity", "Solvable Configurations", 
+   "Solutions per Config"};
+
+(*Display as Grid*)
+Grid[Prepend[tableData, headers], Frame -> All, Alignment -> Center, 
+ Background -> {None, {LightGray, {White}}}, 
+ ItemStyle -> {{Bold, Larger}, None}]
